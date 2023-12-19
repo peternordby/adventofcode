@@ -5,7 +5,6 @@ def fetch_input(day, year=2023):
     from dotenv import load_dotenv
 
     if os.path.exists(f"d{day}.txt"):
-        print(f"Input for day {day} already fetched\n")
         return True
 
     load_dotenv()
@@ -22,3 +21,9 @@ def fetch_input(day, year=2023):
         f.write(response.text)
         print(f"Input for day {day} saved to {f.name}.\n")
         return True
+    
+def read_input(day, in_file=''):
+    filename = f"d{day}{in_file}.txt"
+    with open(filename) as f:
+        content = f.read()
+    return content

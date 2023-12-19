@@ -1,16 +1,11 @@
 import re
+import sys
 
-from utils import fetch_input
+from utils import fetch_input, read_input
 
 
-def read_input(TEST=0):
-    filename = f"{__file__.split('.')[0]}{['', 'x1', 'x2'][TEST]}.txt"
-    with open(filename) as f:
-        puzzle = f.read()
-    return puzzle
-
-def part1(puzzle):
-    maps = puzzle.split('\n\n')
+def part1(parsed):
+    maps = parsed.split('\n\n')
     
     positions = [int(x) for x in maps[0].split(':')[1].strip().split(' ')]
     
@@ -34,8 +29,8 @@ def part1(puzzle):
 
     return min(positions)
 
-def part2(puzzle):
-    maps = puzzle.split('\n\n')
+def part2(parsed):
+    maps = parsed.split('\n\n')
     
     positions = [int(x) for x in maps[0].split(':')[1].strip().split(' ')]
     starts = positions[::2]
@@ -73,7 +68,8 @@ def part2(puzzle):
 if __name__ == '__main__':
     day = int(re.findall(r'\d+', __file__)[-1])
     if fetch_input(day):
-        TEST = 0
-        puzzle = read_input(TEST)
-        print(f'Part 1: {part1(puzzle)}')
-        print(f'Part 2: {part2(puzzle)}')
+        in_file = sys.argv[1] if len(sys.argv) > 1 else ''
+        content = read_input(day, in_file)
+        parsed = content
+        print(f'Part 1: {part1(parsed)}')
+        print(f'Part 2: {part2(parsed)}')

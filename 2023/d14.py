@@ -1,14 +1,9 @@
 import re
+import sys
 
 import numpy as np
-from utils import fetch_input
+from utils import fetch_input, read_input
 
-
-def read_input(TEST=0):
-    filename = f"{__file__.split('.')[0]}{['', 'x1', 'x2'][TEST]}.txt"
-    with open(filename) as f:
-        puzzle = [[ch for ch in row] for row in f.read().splitlines()]
-    return puzzle
 
 def move_rocks(grid):
     for i, row in enumerate(grid):
@@ -23,8 +18,8 @@ def move_rocks(grid):
         grid[i] = list(new_string)
     return grid
 
-def tilt(puzzle, direction):
-    grid = np.array(puzzle)
+def tilt(grid, direction):
+    grid = np.array(grid)
     match direction:
         case 'N':
             rot = np.rot90(grid, 1)
@@ -46,8 +41,8 @@ def tilt(puzzle, direction):
     
     return grid.tolist()
         
-def calc_load(puzzle):
-    rot = np.array(puzzle).T.tolist()
+def calc_load(grid):
+    rot = np.array(grid).T.tolist()
     load = 0
 
     for row in rot:
@@ -65,39 +60,37 @@ def cycle(grid):
         grid = tilt(grid.copy(), direction)
     return grid
 
-def part1(puzzle):
-    tilted = tilt(puzzle, 'N')
+def part1(parsed):
+    tilted = tilt(parsed, 'N')
     load = calc_load(tilted)
     return load
 
-def part2(puzzle):
+def part2(parsed):
     max_cycles = 1_000_000_000
     grid_cache = {}
 
     for i in range(max_cycles):
-        puzzle = cycle(puzzle)
+        parsed = cycle(parsed)
 
-        print(f'Done with cycle {i+1}')
-
-        grid_tuple = tuple(tuple(row) for row in puzzle)
+        grid_tuple = tuple(tuple(row) for row in parsed)
 
         if grid_tuple in grid_cache:
             repeat_length = i - grid_cache[grid_tuple]
-            print(f'Found repeat at cycle {i+1} with length {repeat_length}')
             break
 
         grid_cache[grid_tuple] = i
 
     for _ in range((max_cycles - (i + 1)) % repeat_length):
-        puzzle = cycle(puzzle)
+        parsed = cycle(parsed)
 
-    load = calc_load(puzzle)
+    load = calc_load(parsed)
     return load
 
 if __name__ == '__main__':
     day = int(re.findall(r'\d+', __file__)[-1])
     if fetch_input(day):
-        TEST = 0
-        puzzle = read_input(TEST)
-        print(f'Part 1: {part1(puzzle)}')
-        print(f'Part 2: {part2(puzzle)}')
+        in_file = sys.argv[1] if len(sys.argv) > 1 else ''
+        content = read_input(day, in_file)
+        parsed = [[ch for ch in row] for row in content.splitlines()]
+        print(f'Part 1: {part1(parsed)}')
+        print(f'Part 2: {part2(parsed)}')

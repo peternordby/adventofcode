@@ -1,14 +1,9 @@
 import re
+import sys
 
 import numpy as np
-from utils import fetch_input
+from utils import fetch_input, read_input
 
-
-def read_input(TEST=0):
-    filename = f"{__file__.split('.')[0]}{['', 'x1', 'x2'][TEST]}.txt"
-    with open(filename) as f:
-        puzzle = f.read().split('\n\n')
-    return puzzle
 
 def check_symmetric(pattern, x=None, y=None):
     # Check vertical line
@@ -39,28 +34,27 @@ def check_symmetric(pattern, x=None, y=None):
         return True
 
 
-def part1(puzzle):
+def part1(parsed):
     t = 0
-    for pattern in puzzle:
+    for pattern in parsed:
         pattern = pattern.split('\n')
         for row in range(len(pattern)):
             if check_symmetric(pattern, y=row):
-                print(f'Row {row} is symmetric')
                 t += row * 100
         for col in range(len(pattern[0])):
             if check_symmetric(pattern, x=col):
-                print(f'Col {col} is symmetric')
                 t += col
     return t
 
 
-def part2(puzzle):
+def part2(parsed):
     pass
 
 if __name__ == '__main__':
     day = int(re.findall(r'\d+', __file__)[-1])
     if fetch_input(day):
-        TEST = 0
-        puzzle = read_input(TEST)
-        print(f'Part 1: {part1(puzzle)}')
-        print(f'Part 2: {part2(puzzle)}')
+        in_file = sys.argv[1] if len(sys.argv) > 1 else ''
+        content = read_input(day, in_file)
+        parsed = content.split('\n\n')
+        print(f'Part 1: {part1(parsed)}')
+        print(f'Part 2: {part2(parsed)}')

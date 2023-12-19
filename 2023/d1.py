@@ -1,17 +1,12 @@
 import re
+import sys
 
-from utils import fetch_input
+from utils import fetch_input, read_input
 
 
-def read_input(TEST=0):
-    filename = f"{__file__.split('.')[0]}{['', 'x1', 'x2'][TEST]}.txt"
-    with open(filename) as f:
-        puzzle = f.readlines()
-    return puzzle
-
-def part1(puzzle):
+def part1(parsed):
     total = 0
-    for line in puzzle:
+    for line in parsed:
         digits = []
         for char in line:
             if char.isdigit():
@@ -21,7 +16,7 @@ def part1(puzzle):
     return total
     
 
-def part2(puzzle):
+def part2(parsed):
     spelling = {
         'one': 1,
         'two': 2,
@@ -35,7 +30,7 @@ def part2(puzzle):
     }
 
     total = 0
-    for line in puzzle:
+    for line in parsed:
         digits = []
         i = 0
         while i < len(line):
@@ -60,7 +55,8 @@ def part2(puzzle):
 if __name__ == '__main__':
     day = int(re.findall(r'\d+', __file__)[-1])
     if fetch_input(day):
-        TEST = 0
-        puzzle = read_input(TEST)
-        print(f'Part 1: {part1(puzzle)}')
-        print(f'Part 2: {part2(puzzle)}')
+        in_file = sys.argv[1] if len(sys.argv) > 1 else ''
+        content = read_input(day, in_file)
+        parsed = content.splitlines()
+        print(f'Part 1: {part1(parsed)}')
+        print(f'Part 2: {part2(parsed)}')

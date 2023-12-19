@@ -1,15 +1,8 @@
 import re
-import time
+import sys
 from functools import lru_cache
 
-from utils import fetch_input
-
-
-def read_input(TEST=0):
-    filename = f"{__file__.split('.')[0]}{['', 'x1', 'x2'][TEST]}.txt"
-    with open(filename) as f:
-        puzzle = f.readlines()
-    return puzzle
+from utils import fetch_input, read_input
 
 
 @lru_cache
@@ -30,9 +23,9 @@ def find_variations(springs, nums):
 
     return result    
 
-def part1(puzzle):
+def part1(parsed):
     t = 0
-    for i, line in enumerate(puzzle):
+    for _, line in enumerate(parsed):
         springs, nums = line.split()
         nums = [int(n) for n in nums.split(',')]
         nums = tuple(nums)
@@ -40,9 +33,9 @@ def part1(puzzle):
         t += combs
     return t
 
-def part2(puzzle):
+def part2(parsed):
     t = 0
-    for i, line in enumerate(puzzle):
+    for _, line in enumerate(parsed):
         springs, nums = line.split()
         springs = '?'.join([springs]*5)
         nums = [int(n) for n in nums.split(',')]*5
@@ -54,7 +47,8 @@ def part2(puzzle):
 if __name__ == '__main__':
     day = int(re.findall(r'\d+', __file__)[-1])
     if fetch_input(day):
-        TEST = 0
-        puzzle = read_input(TEST)
-        print(f'Part 1: {part1(puzzle)}')
-        print(f'Part 2: {part2(puzzle)}')
+        in_file = sys.argv[1] if len(sys.argv) > 1 else ''
+        content = read_input(day, in_file)
+        parsed = content.splitlines()
+        print(f'Part 1: {part1(parsed)}')
+        print(f'Part 2: {part2(parsed)}')

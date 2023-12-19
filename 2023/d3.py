@@ -1,21 +1,16 @@
 import re
+import sys
 
-from utils import fetch_input
+from utils import fetch_input, read_input
 
 
-def read_input(TEST=0):
-    filename = f"{__file__.split('.')[0]}{['', 'x1', 'x2'][TEST]}.txt"
-    with open(filename) as f:
-        puzzle = f.readlines()
-    return puzzle
-
-def get_neighbors(puzzle, y, x):
+def get_neighbors(grid, y, x):
     neighbors = []
     neighbors_pos = []
     for i in range(-1, 2):
         for j in range(-1, 2):
             try:
-                neighbors.append(puzzle[y+i][x+j])
+                neighbors.append(grid[y+i][x+j])
                 neighbors_pos.append((y+i, x+j))
             except:
                 continue
@@ -23,11 +18,11 @@ def get_neighbors(puzzle, y, x):
 
 num_positions = []
 
-def part1(puzzle):
+def part1(parsed):
     total = 0
     global num_positions
     
-    for y, line in enumerate(puzzle):
+    for y, line in enumerate(parsed):
         cur_xys = []
         cur = ''
         for x, char in enumerate(line):
@@ -39,7 +34,7 @@ def part1(puzzle):
                 valid = False
                 for pos in cur_xys:
                     if valid: break
-                    neighbors = get_neighbors(puzzle, *pos)[0]
+                    neighbors = get_neighbors(parsed, *pos)[0]
                     for neighbor in neighbors:
                         if not neighbor.isdigit() and neighbor != '.' and neighbor != '\n':
                             valid = True
@@ -53,15 +48,15 @@ def part1(puzzle):
             
     return total
 
-def part2(puzzle):
+def part2(parsed):
     total = 0
 
-    for y, line in enumerate(puzzle):
+    for y, line in enumerate(parsed):
         for x, char in enumerate(line):
             if char == '*':
                 valid_neighbors = []
                 for pos in num_positions:
-                    neigh, neigh_pos = get_neighbors(puzzle, y, x)
+                    neigh, neigh_pos = get_neighbors(parsed, y, x)
                     for i, npos in enumerate(neigh_pos):
                         if not neigh[i].isdigit():
                             continue
@@ -77,7 +72,8 @@ def part2(puzzle):
 if __name__ == '__main__':
     day = int(re.findall(r'\d+', __file__)[-1])
     if fetch_input(day):
-        TEST = 0
-        puzzle = read_input(TEST)
-        print(f'Part 1: {part1(puzzle)}')
-        print(f'Part 2: {part2(puzzle)}')
+        in_file = sys.argv[1] if len(sys.argv) > 1 else ''
+        content = read_input(day, in_file)
+        parsed = content.splitlines()
+        print(f'Part 1: {part1(parsed)}')
+        print(f'Part 2: {part2(parsed)}')

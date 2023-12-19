@@ -1,18 +1,9 @@
 import re
+import sys
 
 import numpy as np
-from utils import fetch_input
+from utils import fetch_input, read_input
 
-
-def read_input(TEST=0):
-    filename = f"{__file__.split('.')[0]}{['', 'x1', 'x2'][TEST]}.txt"
-    with open(filename) as f:
-        puzzle = f.readlines()
-        uni = []
-        for line in puzzle:
-            row = [ch for ch in line.strip()]
-            uni.append(row)
-    return uni
 
 def expand(universe: list[list[str]], p2 = False):
     nu = []
@@ -38,7 +29,7 @@ def expand(universe: list[list[str]], p2 = False):
 def manhattan_distance(p1: tuple, p2: tuple):
     return abs(p1[0] - p2[0]) + abs(p1[1] - p2[1])
 
-def smart_distance(uni, p1: tuple, p2: tuple, mult):
+def smart_distance(universe, p1: tuple, p2: tuple, mult):
     st_row = min(p1[0], p2[0])
     en_row = max(p1[0], p2[0])
     st_col = min(p1[1], p2[1])
@@ -47,19 +38,19 @@ def smart_distance(uni, p1: tuple, p2: tuple, mult):
     rc, cc = 0, 0
 
     if st_row != en_row:
-        c = [r[0] for r in uni][st_row:en_row+1]
+        c = [r[0] for r in universe][st_row:en_row+1]
         rc = c.count('R')
 
     if st_col != en_col:
-        r = uni[0][st_col:en_col+1]
+        r = universe[0][st_col:en_col+1]
         cc = r.count('C')
 
     dist = manhattan_distance(p1, p2) + cc * mult + rc * mult - cc - rc
 
     return dist
 
-def part1(puzzle):
-    expanded = expand(puzzle)
+def part1(parsed):
+    expanded = expand(parsed)
 
     indexes = []
     for i in range(len(expanded)):
@@ -79,8 +70,8 @@ def part1(puzzle):
 
     return t
 
-def part2(puzzle):
-    expanded = expand(puzzle, p2=True)
+def part2(parsed):
+    expanded = expand(parsed, p2=True)
 
     indexes = []
     for i in range(len(expanded)):
@@ -103,7 +94,8 @@ def part2(puzzle):
 if __name__ == '__main__':
     day = int(re.findall(r'\d+', __file__)[-1])
     if fetch_input(day):
-        TEST = 0
-        puzzle = read_input(TEST)
-        print(f'Part 1: {part1(puzzle)}')
-        print(f'Part 2: {part2(puzzle)}')
+        in_file = sys.argv[1] if len(sys.argv) > 1 else ''
+        content = read_input(day, in_file)
+        parsed = [[ch for ch in row] for row in content.splitlines()]
+        print(f'Part 1: {part1(parsed)}')
+        print(f'Part 2: {part2(parsed)}')

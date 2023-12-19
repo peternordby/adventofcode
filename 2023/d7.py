@@ -1,13 +1,8 @@
 import re
+import sys
 
-from utils import fetch_input
+from utils import fetch_input, read_input
 
-
-def read_input(TEST=0):
-    filename = f"{__file__.split('.')[0]}{['', 'x1', 'x2'][TEST]}.txt"
-    with open(filename) as f:
-        puzzle = f.readlines()
-    return puzzle
 
 def hand_strength(hand):
     # Count the occurence of each card
@@ -114,10 +109,10 @@ def compare_same_strength(hands, bids, index=0):
     return ordered
         
 
-def part1(puzzle):
+def part1(parsed):
     hand_to_bid = {}
-    hands = [line.split()[0] for line in puzzle]
-    bids = [line.split()[1] for line in puzzle]
+    hands = [line.split()[0] for line in parsed]
+    bids = [line.split()[1] for line in parsed]
     [hand_to_bid.update({hand: int(bid)}) for hand, bid in zip(hands, bids)]
     hand_strengths = [hand_strength(hand) for hand in hands]
     
@@ -140,10 +135,10 @@ def part1(puzzle):
     return total
         
 
-def part2(puzzle):
+def part2(parsed):
     hand_to_bid = {}
-    hands = [line.split()[0] for line in puzzle]
-    bids = [line.split()[1] for line in puzzle]
+    hands = [line.split()[0] for line in parsed]
+    bids = [line.split()[1] for line in parsed]
     [hand_to_bid.update({hand: int(bid)}) for hand, bid in zip(hands, bids)]
     hand_strengths = [hand_strength_2(hand) for hand in hands]
     
@@ -168,7 +163,8 @@ def part2(puzzle):
 if __name__ == '__main__':
     day = int(re.findall(r'\d+', __file__)[-1])
     if fetch_input(day):
-        TEST = 0
-        puzzle = read_input(TEST)
-        print(f'Part 1: {part1(puzzle)}')
-        print(f'Part 2: {part2(puzzle)}')
+        in_file = sys.argv[1] if len(sys.argv) > 1 else ''
+        content = read_input(day, in_file)
+        parsed = content.splitlines()
+        print(f'Part 1: {part1(parsed)}')
+        print(f'Part 2: {part2(parsed)}')
