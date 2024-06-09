@@ -1,8 +1,6 @@
 # Advent of Code
 
-This repo contains my solutsions for Advent of Code. I started using Advent of Code in 2019, while in my first year of university, to practice problem sovling and learning more about python. 
-
-This is mostly just for fun, and most of the solutions have not been optimized computationally or refactored for readability. I've made some helper functions for reading input via network requests and reading files.
+I have created a repository containing my solutions for Advent of Code. I started participating in Advent of Code during my first year of university to practice problem-solving and to learn Python. This is mainly for fun, and most of the solutions have not been optimized for efficiency or refactored for readability. I have also created some helper functions for reading input via network requests and reading files.
 
 From 2023 and onwards, you can run the solution for day x with:
 ```
@@ -12,7 +10,7 @@ or
 ```
 python d[x].py [file]
 ```
-to run test inputs where file is the filename for the .txt with the example.
+to test inputs where [file] represents the filename for the .txt containing the example.
 
 Happy holidays! ❄
 
