@@ -5,10 +5,10 @@ import numpy as np
 from utils import fetch_input, read_input
 
 
-def part1(parsed):
+def part1(parsed, a, b):
     return sum([abs(a_num - b_num) for a_num, b_num in zip(a, b)])
 
-def part2(parsed):
+def part2(parsed, a, b):
     return sum([num * b.count(num) for num in a])
 
 if __name__ == '__main__':
@@ -19,5 +19,5 @@ if __name__ == '__main__':
         parsed = content.splitlines()
         a = sorted([int(line.split()[0]) for line in parsed])
         b = sorted([int(line.split()[1]) for line in parsed])
-        print(f'Part 1: {part1(parsed)}')
-        print(f'Part 2: {part2(parsed)}')
+        print(f'Part 1: {part1(parsed, a, b)}')
+        print(f'Part 2: {part2(parsed, a, b)}')

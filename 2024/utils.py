@@ -1,4 +1,4 @@
-def fetch_input(day, year=2023):
+def fetch_input(day, year=2024):
     import os
 
     import requests
