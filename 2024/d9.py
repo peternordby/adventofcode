@@ -9,10 +9,8 @@ def part1(content):
     disk = []
 
     for i, n in enumerate(content):
-        # even = file_length
         if i%2 == 0:
             [disk.append(i//2) for _ in range(n)]
-        # odd = free_space
         else:
             [disk.append('.') for _ in range(n)]
 
@@ -43,49 +41,32 @@ def part2(content):
     disk = []
 
     for i, n in enumerate(content):
-        # even = file_length
         if i%2 == 0:
             [disk.append(i//2) for _ in range(n)]
-        # odd = free_space
         else:
             [disk.append('.') for _ in range(n)]
 
-    disk_i = len(disk) - 1
-    fl_i = len(content) - 1
 
+    x = len(content) - 1
+    end = len(disk)
+    f_len = content[x]
 
-    # Find free space from left to right
-    while 0 <= fl_i:
-        print(disk)
-        a = 0
-        file_id = disk[disk_i]
+    while end > 0:
+        start = end - f_len
 
-        for i, n in enumerate(content):
-            if i > fl_i:
+        i = 0
+        while i < start:
+            space = disk[i:i+f_len]
+            if all([c == "." for c in space]):
+                disk = disk[:i] + disk[start:end] + disk[i+f_len:start] + disk[i:i+f_len] + disk[end:]
                 break
+            i += 1
 
-            # even = file_length
-            if i%2 == 0:
-                a += n
-                continue
-                
-            # odd = free_space
-            # if free space is big enough, replace free space with file indec
-            elif n >= file_len:
-                for j in range(file_len):
-                    disk[a+j] = file_id
-                    disk[disk_i-j] = "."
-                a += n
-                break
-
-            a += n
-            
-        disk_i -= file_len
-        disk_i -= content[fl_i-1]
-        fl_i -= 2
-
-    print(disk)
-
+        x -= 1
+        end -= f_len
+        end -= content[x]
+        x -= 1
+        f_len = content[x]
 
     ans = 0
     for i, n in enumerate(disk):
