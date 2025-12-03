@@ -1,7 +1,6 @@
 import re
 import sys
 
-import numpy as np
 from utils import fetch_input, read_input
 
 
