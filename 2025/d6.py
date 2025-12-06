@@ -3,15 +3,8 @@ import sys
 
 from utils import fetch_input, read_input
 
-
-def start_value(op):
-    match op:
-        case "+":
-            return 0
-        case "*":
-            return 1
-        case _:
-            raise TypeError
+start_value = {"+": 0, "*": 1}
+operation = {"+": lambda a, b: a + b, "*": lambda a, b: a * b}
 
 
 def part1(parsed):
@@ -22,13 +15,9 @@ def part1(parsed):
 
     ans = 0
     for i, op in enumerate(ops):
-        res = start_value(op)
-        if op == "+":
-            for line in table:
-                res += line[i]
-        elif op == "*":
-            for line in table:
-                res *= line[i]
+        res = start_value[op]
+        for line in table:
+            res = operation[op](res, line[i])
         ans += res
 
     return ans
@@ -41,7 +30,7 @@ def part2(parsed):
     ans = 0
     opi = len(ops) - 1
     op = ops[opi]
-    res = start_value(op)
+    res = start_value[op]
     for i in range(len(table[0]) - 1, -1, -1):
         num_string = ""
         for line in table:
@@ -49,20 +38,19 @@ def part2(parsed):
                 continue
             else:
                 num_string += line[i]
+
         if num_string == "":
             opi -= 1
             if opi < 0:
                 break
             op = ops[opi]
             ans += res
-            res = start_value(op)
-        else:
-            if op == "+":
-                res += int(num_string)
-            elif op == "*":
-                res *= int(num_string)
-    ans += res
+            res = start_value[op]
 
+        else:
+            res = operation[op](res, int(num_string))
+
+    ans += res
     return ans
 
 
