@@ -13,7 +13,10 @@ def distance(this: tuple[int, int, int], other: tuple[int, int, int]):
 
 
 def part1(parsed, loops):
-    vectors = [tuple([int(x) for x in line.split(",")]) for line in parsed]
+    vectors = [
+        (int(line.split(",")[0]), int(line.split(",")[1]), int(line.split(",")[2]))
+        for line in parsed
+    ]
     combinations = [
         (this, other) for i, this in enumerate(vectors) for other in vectors[i + 1 :]
     ]
@@ -62,7 +65,10 @@ def part1(parsed, loops):
 
 
 def part2(parsed):
-    vectors = [tuple([int(x) for x in line.split(",")]) for line in parsed]
+    vectors = [
+        (int(line.split(",")[0]), int(line.split(",")[1]), int(line.split(",")[2]))
+        for line in parsed
+    ]
     combinations = [
         (this, other) for i, this in enumerate(vectors) for other in vectors[i + 1 :]
     ]
